@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách cầu thủ</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f8;}
+        h1 {color: #333;}
+        a.button {background: #007bff; color: #fff; padding: 6px 12px; border-radius: 4px; text-decoration: none;}
+        a.button:hover {background: #0056b3;}
+        table {width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        th, td {border: 1px solid #ddd; padding: 8px; text-align: center;}
+        th {background: #007bff; color: #fff;}
+        img {border-radius: 4px;}
+        .action a {margin: 0 3px; text-decoration: none; color: #007bff;}
+        .action a:hover {text-decoration: underline;}
+        p.mess {color: green; font-weight: bold;}
+    </style>
+</head>
+<body>
+<h1>Danh sách cầu thủ</h1>
+
+<div th:if="${lastImage}">
+    <p>Cầu thủ bạn vừa xem gần nhất:</p>
+    <img th:src="${lastImage}" alt="Cầu thủ gần nhất" width="150">
+    <hr>
+</div>
+
+<p th:if="${mess}" th:text="${mess}" class="mess"></p>
+
+<a href="/cauthu/add" class="button">+ Thêm mới cầu thủ</a>
+<a href="/cauthu/favorite/list" class="button" style="background:#28a745;">💚 Xem yêu thích</a>
+
+<table>
+    <tr>
+        <th>STT</th>
+        <th>Mã</th>
+        <th>Tên</th>
+        <th>Ngày Sinh</th>
+        <th>Kinh Nghiệm</th>
+        <th>Vị trí</th>
+        <th>Hình ảnh</th>
+        <th>Đội tuyển</th>
+        <th>Hành động</th>
+    </tr>
+    <tr th:each="cauThu, status : ${cauThuList}">
+        <td th:text="${status.count}"></td>
+        <td th:text="${cauThu.id}"></td>
+        <td th:text="${cauThu.name}"></td>
+        <td th:text="${cauThu.birthday}"></td>
+        <td th:text="${cauThu.exprience}"></td>
+        <td th:text="${cauThu.location}"></td>
+        <td><img th:src="@{${cauThu.image}}" alt="Ảnh cầu thủ" width="80" height="100"/></td>
+        <td th:text="${cauThu.doiTuyen.getName()}"></td>
+        <td class="action">
+            <a th:href="@{/cauthu/details/{id}(id=${cauThu.id})}">Chi tiết</a> |
+            <a th:href="@{/cauthu/edit/{id}(id=${cauThu.id})}">Sửa</a> |
+            <a th:href="@{/cauthu/delete/{id}(id=${cauThu.id})}"
+               onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a> |
+            <a th:href="@{/cauthu/favorite/add/{id}(id=${cauThu.id})}"
+               style="color: #e63946; font-weight: bold;">❤️ Yêu thích</a>
+        </td>
+    </tr>
+</table>
+
+<div style="margin-top: 15px; text-align: center;">
+    <a th:if="${cauThuPage.hasPrevious()}"
+       th:href="@{/cauthu/list(page=${cauThuPage.number - 1}, searchName=${searchName})}">
+        Trước
+    </a>
+
+    <span th:text="${cauThuPage.number + 1}"></span> /
+    <span th:text="${cauThuPage.totalPages}"></span>
+
+    <a th:if="${cauThuPage.hasNext()}"
+       th:href="@{/cauthu/list(page=${cauThuPage.number + 1}, searchName=${searchName})}">
+        Sau
+    </a>
+</div>
+
+</body>
+</html>

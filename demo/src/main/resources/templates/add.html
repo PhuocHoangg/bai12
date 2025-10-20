@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm cầu thủ</title>
+    <style>
+        body {font-family: Arial; background: #f4f6f8; padding: 20px;}
+        form {background: #fff; padding: 20px; max-width: 420px; margin: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 6px;}
+        h1 {text-align: center;}
+        label {display: block; margin-top: 10px; font-weight: bold;}
+        input, select {width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box;}
+        button {margin-top: 15px; width: 100%; background: #28a745; color: #fff; border: none; padding: 10px; border-radius: 4px; font-size: 16px;}
+        button:hover {background: #218838;}
+        span.error {color: red; font-size: 13px;}
+    </style>
+</head>
+<body>
+<h1>Thêm mới cầu thủ</h1>
+
+<form th:action="@{/cauthu/add}" th:object="${cauThuDto}" method="post">
+    <input th:field="*{id}" readonly hidden="hidden"/>
+
+    <label>Tên cầu thủ:</label>
+    <input th:field="*{name}" placeholder="Nhập tên cầu thủ"/>
+    <span class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+
+    <label>Ngày sinh:</label>
+    <input type="date" th:field="*{birthday}"/>
+    <span class="error" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}"></span>
+
+    <label>Kinh nghiệm:</label>
+    <input th:field="*{exprience}" placeholder="Nhập kinh nghiệm"/>
+    <span class="error" th:if="${#fields.hasErrors('exprience')}" th:errors="*{exprience}"></span>
+
+    <label>Vị trí:</label>
+    <input th:field="*{location}" placeholder="Vị trí thi đấu"/>
+    <span class="error" th:if="${#fields.hasErrors('location')}" th:errors="*{location}"></span>
+
+    <label>Ảnh cầu thủ (link):</label>
+    <input th:field="*{image}" placeholder="Nhập link ảnh hoặc đường dẫn"/>
+    <small style="color: gray;">(Có thể nhập URL ảnh trực tiếp)</small>
+    <span class="error" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></span>
+
+    <label>Đội tuyển:</label>
+    <select th:field="*{doiTuyen}" required>
+        <option value="">-- Chọn đội tuyển --</option>
+        <option th:each="dt : ${doiTuyenList}"
+                th:value="${dt.id}"
+                th:text="${dt.name}">
+        </option>
+    </select>
+
+    <span class="error" th:if="${#fields.hasErrors('doiTuyen')}" th:errors="*{doiTuyen}"></span>
+
+    <button type="submit">Thêm</button>
+</form>
+
+</body>
+</html>

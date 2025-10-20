@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin cầu thủ</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input, select {
+            margin-bottom: 10px;
+            display: block;
+            padding: 6px;
+            width: 250px;
+        }
+        img {
+            margin-top: 10px;
+            max-width: 250px;
+            border-radius: 8px;
+            display: none;
+        }
+        table {
+            margin-top: 20px;
+            border-collapse: collapse;
+            width: 90%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+        }
+        th {
+            background: #eee;
+        }
+    </style>
+</head>
+<body>
+<h2>Nhập thông tin cầu thủ</h2>
+
+<form id="formCauThu">
+    <input id="name" placeholder="Nhập tên">
+    <input type="date" id="birthday" placeholder="Nhập ngày sinh">
+    <input id="exprience" placeholder="Nhập số năm kinh nghiệm">
+    <select id="location">
+        <option value="0">Chọn Vị Trí</option>
+        <option value="Thủ Môn">Thủ Môn</option>
+        <option value="Hậu Vệ">Hậu Vệ</option>
+        <option value="Tiền Đạo">Tiền Đạo</option>
+        <option value="Trung Vệ">Trung Vệ</option>
+    </select>
+    <select id="doiTuyen">
+        <option value="0">Chọn Đội Tuyển</option>
+        <option value="1">Real</option>
+        <option value="2">MU</option>
+        <option value="3">Arsenal</option>
+    </select>
+    <input id="imageLink" placeholder="Dán link ảnh cầu thủ vào đây">
+    <button type="button" id="btn-add">Thêm mới cầu thủ</button>
+</form>
+
+<h3>Danh sách cầu thủ</h3>
+<table>
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Tên</th>
+        <th>Ngày sinh</th>
+        <th>Kinh nghiệm</th>
+        <th>Vị trí</th>
+        <th>Đội tuyển</th>
+        <th>Ảnh</th>
+    </tr>
+    </thead>
+    <tbody id="content"></tbody>
+</table>
+
+<script>
+    $(document).ready(function () {
+
+        display();
+
+        $("#btn-add").click(function (e) {
+            e.preventDefault();
+
+            let name = $("#name").val();
+            let birthday = $("#birthday").val();
+            let exprience = $("#exprience").val();
+            let location = $("#location").val();
+            let doiTuyen = $("#doiTuyen").val();
+            let image = $("#imageLink").val();
+
+            let cauthu = {
+                name: name,
+                birthday: birthday,
+                exprience: exprience,
+                location: location,
+                image: image,
+                doiTuyen: {
+                    id: doiTuyen
+                }
+            };
+
+            console.log("Dữ liệu gửi đi:", cauthu);
+
+            $.ajax({
+                url: "http://localhost:8080/v1/api/cauthu/add",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(cauthu),
+                success: function () {
+                    alert("Thêm cầu thủ thành công!");
+                    display();
+                    $("#formCauThu")[0].reset();
+                },
+                error: function (res) {
+                    console.log("Lỗi:", res);
+                    alert("Thêm thất bại!");
+                }
+            });
+        });
+
+        function display() {
+            $.ajax({
+                url: "http://localhost:8080/v1/api/cauthu",
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let content = "";
+                    for (let i = 0; i < data.length; i++) {
+                        let ct = data[i];
+                        content += `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${ct.name}</td>
+                                <td>${ct.birthday || ''}</td>
+                                <td>${ct.exprience || ''}</td>
+                                <td>${ct.location || ''}</td>
+                                <td>${ct.doiTuyen ? ct.doiTuyen.name : ''}</td>
+                                <td><img src="${ct.image || ''}" style="width:60px;height:60px;object-fit:cover;border-radius:6px"></td>
+                            </tr>`;
+                    }
+                    $("#content").html(content);
+                },
+                error: function () {
+                    console.log("Không thể tải danh sách cầu thủ");
+                }
+            });
+        }
+
+    });
+</script>
+</body>
+</html>

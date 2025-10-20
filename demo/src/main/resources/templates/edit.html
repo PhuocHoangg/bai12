@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật cầu thủ</title>
+    <style>
+        body {font-family: Arial; background: #f4f6f8; padding: 20px;}
+        form {background: #fff; padding: 20px; max-width: 400px; margin: auto; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 6px;}
+        h1 {text-align: center;}
+        label {display: block; margin-top: 10px; font-weight: bold;}
+        input {width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box;}
+        button {margin-top: 15px; width: 100%; background: #007bff; color: #fff; border: none; padding: 10px; border-radius: 4px; font-size: 16px;}
+        button:hover {background: #0056b3;}
+    </style>
+</head>
+<body>
+<h1>Cập nhật cầu thủ</h1>
+<form th:action="@{/cauthu/edit}" th:object="${cauThu}" method="post">
+    <input type="hidden" th:field="*{id}"/>
+    <label>Tên cầu thủ:</label>
+    <input th:field="*{name}" required/>
+    <label>Ngày sinh:</label>
+    <input type="date" th:field="*{birthday}" required/>
+    <label>Kinh nghiệm:</label>
+    <input th:field="*{exprience}" required/>
+    <label>Vị trí:</label>
+    <input th:field="*{location}" required/>
+    <label>Ảnh cầu thủ (link):</label>
+    <input th:field="*{image}" />
+    <button type="submit">Cập nhật</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết cầu thủ</title>
+    <style>
+        body { font-family: Arial;background: #f4f6f8; padding: 20px;}
+        .card {
+            background: #fff;
+            padding: 20px;
+            max-width: 700px;
+            margin: 20px auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .info {flex: 1;}
+        .info h1 {margin: 0 0 10px 0;}
+        .row {margin-top: 10px;}
+        .label {font-weight: bold; color: #333;}
+        .value {margin-top: 4px; color: #555;}
+        .thumb {width: 220px; flex-shrink: 0;}
+        .thumb img {width: 100%; border-radius: 6px; object-fit: cover;}
+        .actions {margin-top: 18px; display: flex; gap: 10px;}
+        .btn {
+            display: inline-block;
+            padding: 8px 14px;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .btn-primary {background:#007bff; color:#fff;}
+        .btn-outline {background: transparent; border: 1px solid #ccc; color:#333;}
+        .btn-danger {background:#dc3545;color:#fff;}
+        .meta {color:#777; font-size:13px; margin-top:6px;}
+    </style>
+</head>
+<body>
+<div class="card" th:if="${cauThu != null}">
+    <div class="thumb">
+        <div th:if="${cauThu.image}">
+            <img th:src="${cauThu.image}" th:alt="${cauThu.name}" />
+        </div>
+        <div th:if="${cauThu.image == null}">
+            <img src="/images/no-image.png" alt="no image" />
+        </div>
+    </div>
+
+    <div class="info">
+        <h1 th:text="${cauThu.name}">Tên cầu thủ</h1>
+
+        <div class="row">
+            <div class="label">ID</div>
+            <div class="value" th:text="${cauThu.id}">1</div>
+        </div>
+
+        <div class="row">
+            <div class="label">Ngày sinh</div>
+            <div class="value" th:text="${#temporals.format(cauThu.birthday, 'yyyy-MM-dd')}">2000-01-01</div>
+        </div>
+
+        <div class="row">
+            <div class="label">Kinh nghiệm</div>
+            <div class="value" th:text="${cauThu.exprience}">5 năm</div>
+        </div>
+
+        <div class="row">
+            <div class="label">Vị trí</div>
+            <div class="value" th:text="${cauThu.location}">Tiền đạo</div>
+        </div>
+
+        <div class="row meta">
+            <div th:if="${cauThu.image}">
+                <span>Ảnh nguồn: </span><a th:href="${cauThu.image}" th:text="${cauThu.image}" target="_blank" rel="noopener">Xem link</a>
+            </div>
+        </div>
+
+        <div class="actions">
+            <a th:href="@{/cauthu/list}" class="btn btn-outline">← Quay lại</a>
+
+        </div>
+    </div>
+</div>
+
+<div th:if="${cauThu == null}" style="max-width:700px;margin:40px auto;text-align:center;color:#666;">
+    <h2>Không tìm thấy cầu thủ</h2>
+    <p>Vui lòng quay lại <a th:href="@{/cauthu/list}">danh sách cầu thủ</a>.</p>
+</div>
+</body>
+</html>

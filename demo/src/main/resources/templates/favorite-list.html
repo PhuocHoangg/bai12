@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách cầu thủ yêu thích</title>
+    <style>
+        body {font-family: Arial, sans-serif; margin: 20px; background-color: #f4f6f8;}
+        h1 {color: #333;}
+        a.button {background: #007bff; color: #fff; padding: 6px 12px; border-radius: 4px; text-decoration: none;}
+        a.button:hover {background: #0056b3;}
+        table {width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);}
+        th, td {border: 1px solid #ddd; padding: 8px; text-align: center;}
+        th {background: #007bff; color: #fff;}
+        img {border-radius: 4px;}
+        .action a {margin: 0 3px; text-decoration: none; color: #dc3545;}
+        .action a:hover {text-decoration: underline;}
+        p.mess {color: green; font-weight: bold;}
+    </style>
+</head>
+<body>
+<h1>💚 Danh sách cầu thủ yêu thích</h1>
+
+<p th:if="${mess}" th:text="${mess}" class="mess"></p>
+
+<p th:if="${#lists.isEmpty(favoriteList)}" style="color: gray;">
+    Chưa có cầu thủ nào trong danh sách yêu thích.
+</p>
+
+<table th:if="${!#lists.isEmpty(favoriteList)}">
+    <tr>
+        <th>STT</th>
+        <th>Mã</th>
+        <th>Tên</th>
+        <th>Ngày Sinh</th>
+        <th>Vị trí</th>
+        <th>Đội tuyển</th>
+        <th>Hình ảnh</th>
+        <th>Hành động</th>
+    </tr>
+    <tr th:each="ct, status : ${favoriteList}">
+        <td th:text="${status.count}"></td>
+        <td th:text="${ct.id}"></td>
+        <td th:text="${ct.name}"></td>
+        <td th:text="${ct.birthday}"></td>
+        <td th:text="${ct.location}"></td>
+        <td th:text="${ct.doiTuyen.name}"></td>
+        <td><img th:src="@{${ct.image}}" alt="Ảnh cầu thủ" width="80" height="100"></td>
+    </tr>
+</table>
+
+<div style="margin-top: 20px;">
+    <a href="/cauthu/list" class="button">← Quay lại danh sách</a>
+</div>
+</body>
+</html>
